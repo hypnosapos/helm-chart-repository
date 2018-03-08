@@ -1,0 +1,4 @@
+# All files/directories starting with "."
+.*
+!.gitignore
+!.circleci

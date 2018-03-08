@@ -1,0 +1,15 @@
+api:
+  config:
+    repos:
+      - name: stable
+        url: http://storage.googleapis.com/kubernetes-charts
+        source: https://github.com/kubernetes/charts/tree/master/stable
+      - name: incubator
+        url: http://storage.googleapis.com/kubernetes-charts-incubator
+        source: https://github.com/kubernetes/charts/tree/master/incubator
+      - name: seldon
+        url: https://storage.googleapis.com/seldon-charts
+        source: https://github.com/SeldonIO/seldon-core/tree/master/helm-charts
+      - name: hypnosapos
+        url: http://storage.googleapis.com/kubernetes-charts-incubator
+        source: https://github.com/hypnosapos/helm-charts-repository
