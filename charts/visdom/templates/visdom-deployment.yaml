@@ -1,0 +1,24 @@
+apiVersion": deployment
+kind: Deployment
+  metadata:
+    labels:
+      app: visdom
+    name: visdom
+  spec:
+    annotations:
+      project_name: {{ .Values.project }}
+      deployment_version: v1
+    name: {{ .Values.name }}
+    oauth_key: {{ .Values.oauth_key }}
+    oauth_secret: {{ .Values.oauth_secret }}
+    predictors:
+    - componentSpec:
+        spec:
+          containers:
+          - image: hypnosapos/cartpolerlremoteagent:{{ .Values.config.image.tag }}
+            imagePullPolicy: IfNotExist
+            name: {{ .Values.name }}
+            resources:
+              requests:
+                memory": "2Mi"
+          terminationGracePeriodSeconds": 20
