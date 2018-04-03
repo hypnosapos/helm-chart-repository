@@ -1,9 +1,9 @@
-apiVersion": deployment
-kind: Deployment
+apiVersion": machinelearning.seldon.io/v1alpha1
+kind: SeldonDeployment
   metadata:
     labels:
-      app: visdom
-    name: visdom
+      app: seldon
+    name: {{ .Values.name }}
   spec:
     annotations:
       project_name: {{ .Values.project }}
@@ -15,10 +15,20 @@ kind: Deployment
     - componentSpec:
         spec:
           containers:
-          - image: hypnosapos/visdom:{{ .Values.config.image.tag }}
+          - image: hypnosapos/cartpolerlremoteagent:{{ .Values.config.image.tag }}
             imagePullPolicy: IfNotExist
             name: {{ .Values.name }}
             resources:
               requests:
-                memory": "512Mi"
+                memory": "2Mi"
           terminationGracePeriodSeconds": 20
+      graph:
+        children: []
+        name: {{ .Values.name }}
+        endpoint:
+          type: "REST"
+        type: "MODEL"
+      name: {{ .Values.name }}
+      replicas: 1
+      annotations:
+      predictor_version: v1
