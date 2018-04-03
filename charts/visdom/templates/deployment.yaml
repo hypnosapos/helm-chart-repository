@@ -1,0 +1,64 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: visdom
+  labels:
+    # The "heritage" label is used to track which tool deployed a given chart.
+    # It is useful for admins who want to see what releases a particular tool
+    # is responsible for.
+    heritage: {{ .Release.Service }}
+    # The "release" convention makes it easy to tie a release to all of the
+    # Kubernetes resources that were created as part of that release.
+    release: {{ .Release.Name }}
+    # This makes it easy to audit chart usage.
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    app: {{ .Chart.Name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+{{- if .Values.podAnnotations }}
+      # Allows custom annotations to be specified
+      annotations:
+{{ toYaml .Values.podAnnotations | indent 8 }}
+{{- end }}
+      labels:
+        app: {{ .Chart.name }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.name }}
+          image: {{ .Values.container.image }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.container.cmd_args }}
+          cmd_args:
+          {{- range .Values.container.cmd_args }}
+          - {{ . }}
+          {{- end -}}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.image.port }}
+              protocol: TCP
+          # This (and the volumes section below) mount the config map as a volume.
+{{- if .Values.persistence.enable and .Values.persistence.name}}
+          volumeMounts:
+            - mountPath: {{ .Values.visdom.data }}
+              name: {{ .Values.persistence.name }}
+{{- end }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+    {{- end }}
+{{- if .Values.persistence.enable and .Values.persistence.name}}
+      volumes:
+        - name: {{ .Values.persistence.name }
+      {{- if .Values.persistence.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ .Values.persistence.existingClaim | default "visdom" }}
+      {{- else }}
+        emptyDir: {}
+      {{- end -}}
+{{- end }}

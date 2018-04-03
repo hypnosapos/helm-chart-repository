@@ -1,9 +1,11 @@
-apiVersion: v1
-description: Visdom Deployment
+description: Visdom Deployment. Render tour grafic in a unique centric point.
+kubeVersion: ">=1.2.0"
 keywords:
 - kubernetes
 - machine-learning
 - visdom
+- graphics
+- plotly
 name: visdom
 home: https://github.com/hypnosapos/helm-chart-repository
 sources:

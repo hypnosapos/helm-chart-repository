@@ -1,1 +1,36 @@
-name: visdom
+replicaCount: 1
+restartPolicy: Always
+
+container:
+  image: hypnosapos/visdom:latest
+  pullPolicy: IfNotPresent
+  port: 8097
+  env:
+  - "-logging_level=DEBUG"
+  - "-env_path=/usr/share/visdom"
+
+service:
+  annotations: {}
+  clusterIP: ""
+  externalIPs: []
+  loadBalancerIP: ""
+  loadBalancerSourceRanges: []
+  type: ClusterIP
+  port: 8097
+  nodePort: ""
+
+podAnnotations: {}
+
+resources: {}
+
+nodeSelector: {}
+
+persistence:
+  enbale: true
+  size: 10G
+  accesMode: ReadWriteOnce
+  storageClass: -
+  existingClaim:
+
+visdom:
+  data: /usr/share/visdom
