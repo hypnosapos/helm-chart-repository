@@ -9,11 +9,11 @@ Deploy visdom
 ## Chart Details
 This chart will do the following:
 
-* Deploy visdom as deployment
+* Deploy visdom as kubernetes deployment resource
 
 ## Installing the Chart
 
-To install the chart with the release name `cartpole-rl-remote`:
+To install the chart type:
 
 ```bash
 $ helm install --name visdom hypnosapos/visdom

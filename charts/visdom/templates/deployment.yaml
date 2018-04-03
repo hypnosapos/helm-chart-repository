@@ -1,7 +1,7 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: visdom
+  name: {{ .Chart.Name }}
   labels:
     # The "heritage" label is used to track which tool deployed a given chart.
     # It is useful for admins who want to see what releases a particular tool
@@ -15,6 +15,9 @@ metadata:
     app: {{ .Chart.Name }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
   template:
     metadata:
 {{- if .Values.podAnnotations }}
@@ -23,28 +26,42 @@ spec:
 {{ toYaml .Values.podAnnotations | indent 8 }}
 {{- end }}
       labels:
-        app: {{ .Chart.name }}
+        app: {{ .Chart.Name }}
         release: {{ .Release.Name }}
     spec:
       containers:
-        - name: {{ .Chart.name }}
+        - name: {{ .Chart.Name }}
           image: {{ .Values.container.image }}
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          {{- if .Values.container.cmd_args }}
-          cmd_args:
-          {{- range .Values.container.cmd_args }}
-          - {{ . }}
-          {{- end -}}
+          imagePullPolicy: {{ .Values.container.pullPolicy }}
+          {{- if .Values.container.envs }}
+          env:
+          {{- with .Values.container.envs }}
+          - name: PORT
+            value: {{ .port | default "8097" | quote }}
+          - name: ENV_PATH
+            value: {{ .env_path | default "~/.visdom/" | quote }}
+          - name: LOGGING_LEVEL
+            value: {{ .logging_level | default "INFO" | quote }}
+          {{- end }}
           {{- end }}
           ports:
-            - name: http
-              containerPort: {{ .Values.image.port }}
-              protocol: TCP
-          # This (and the volumes section below) mount the config map as a volume.
-{{- if .Values.persistence.enable and .Values.persistence.name}}
+          - name: http
+            containerPort: {{ .Values.container.envs.port }}
+            protocol: TCP
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.container.envs.port }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: {{ .Values.container.envs.port }}
+            initialDelaySeconds: 15
+            periodSeconds: 20
+{{- if .Values.persistence.enabled}}
           volumeMounts:
-            - mountPath: {{ .Values.visdom.data }}
-              name: {{ .Values.persistence.name }}
+            - mountPath: {{ .Values.container.envs.env_path }}
+              name: {{ .Chart.Name }}
 {{- end }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
@@ -52,13 +69,13 @@ spec:
       nodeSelector:
 {{ toYaml .Values.nodeSelector | indent 8 }}
     {{- end }}
-{{- if .Values.persistence.enable and .Values.persistence.name}}
+{{- if .Values.persistence.enabled}}
       volumes:
-        - name: {{ .Values.persistence.name }
+        - name: {{ .Chart.Name }}
       {{- if .Values.persistence.enabled }}
-        persistentVolumeClaim:
-          claimName: {{ .Values.persistence.existingClaim | default "visdom" }}
+          persistentVolumeClaim:
+            claimName: {{ .Chart.Name }}
       {{- else }}
-        emptyDir: {}
+          emptyDir: {}
       {{- end -}}
 {{- end }}

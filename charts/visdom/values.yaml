@@ -4,10 +4,10 @@ restartPolicy: Always
 container:
   image: hypnosapos/visdom:latest
   pullPolicy: IfNotPresent
-  port: 8097
-  env:
-  - "-logging_level=DEBUG"
-  - "-env_path=/usr/share/visdom"
+  envs:
+    logging_level: DEBUG
+    env_path: /usr/share/visdom
+    port: 8097
 
 service:
   annotations: {}
@@ -26,11 +26,8 @@ resources: {}
 nodeSelector: {}
 
 persistence:
-  enbale: true
-  size: 10G
-  accesMode: ReadWriteOnce
-  storageClass: -
-  existingClaim:
+  enabled: true
+  size: 5Gi
+  accessMode: ReadWriteOnce
+  storageClass: standard
 
-visdom:
-  data: /usr/share/visdom
