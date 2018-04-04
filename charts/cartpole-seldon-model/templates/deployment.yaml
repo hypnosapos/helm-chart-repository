@@ -19,7 +19,7 @@ spec:
     deployment_version: v1
   name: {{ .Values.name }}
   oauth_key: {{ .Values.seldon.oauth_key }}
-  oauth_secret: {{ .Values.seldon.auth_secret }}
+  oauth_secret: {{ .Values.seldon.oauth_secret }}
   predictors:
   - componentSpec:
       spec:
@@ -30,7 +30,7 @@ spec:
           resources:
             requests:
               memory: "2Mi"
-        terminationGracePeriodSeconds: 20
+        terminationGracePeriodSeconds: {{ .Values.gracePeriod | default 20 }}
     graph:
       children: []
       name: {{ .Values.name }}
@@ -38,6 +38,6 @@ spec:
         type: "REST"
       type: "MODEL"
     name: {{ .Values.name }}
-    replicas: 1
+    replicas: {{ .Values.replicas | default 1}}
     annotations:
-    predictor_version: v1
+      predictor_version: v1

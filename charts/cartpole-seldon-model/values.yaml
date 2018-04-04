@@ -1,13 +1,12 @@
 project: "Cartpole RL Remote Agent"
-name: cartpole
+name: cartpole-model
 
 container:
   image:
-    name: hypnosapos/cartpole-rl-seldon
+    name: hypnosapos/cartpolerlremoteagent
     tag: latest
     pullPolicy: IfNotPresent
 
 seldon:
   oauth_key: "oauth-key"
   oauth_secret: "oauth-secret"
-  type: MODEL

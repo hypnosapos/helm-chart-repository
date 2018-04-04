@@ -1,6 +1,6 @@
-name: cartpole-rl-seldon
+name: cartpole-seldon-model
 version: 0.1
-description: Seldon Deployment for cartpole-rl model
+description: Model Seldon Deployment for cartpole-rl model
 keywords:
 - kubernetes
 - machine-learning
