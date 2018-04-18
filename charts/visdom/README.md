@@ -23,11 +23,11 @@ $ helm install --name visdom hypnosapos/visdom
 
 The following table lists the configurable parameters.
 
-|         Parameter         |           Description             |        Default    |
-|---------------------------|-----------------------------------|-------------------|
-| `project`       | Project name | `Cartpole RL Remote Agent` |
-| `name`          | Name of deployment  |  `keras-cartpole`       |
-| `oauth_key`     | OAuth key           | `oauth_key`   |
-| `oauth_secret`  | OAuth Secret        | `oauth_secret`          |
+
+|         Name         |        Default    |
+|----------------------|-------------------|
+| `PORT`               | 8097              |
+| `ENV_PATH`           | $HOME/.visdom     |
+| `LOGGING_LEVEL`      | INFO              |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`.

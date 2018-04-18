@@ -1,0 +1,12 @@
+project: "Cartpole RL Remote Agent"
+name: cartpole-router
+
+container:
+  image:
+    name: hypnosapos/cartpolerlremoteagent
+    tag: latest
+    pullPolicy: IfNotPresent
+
+seldon:
+  oauth_key: "oauth-key"
+  oauth_secret: "oauth-secret"

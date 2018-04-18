@@ -1,6 +1,6 @@
-name: cartpole-seldon-model
+name: cartpole-seldon-router
 version: 0.1
-description: MODEL Seldon Deployment for cartpole-rl model
+description: ROUTER Seldon Deployment for cartpole-rl model
 keywords:
 - kubernetes
 - machine-learning

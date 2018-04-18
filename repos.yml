@@ -12,4 +12,4 @@ api:
         source: https://github.com/SeldonIO/seldon-core/tree/master/helm-charts
       - name: hypnosapos
         url: http://storage.googleapis.com/hypnosapos-charts
-        source: https://github.com/hypnosapos/helm-charts-repository
+        source: https://github.com/hypnosapos/helm-charts-repository/tree/master/charts
